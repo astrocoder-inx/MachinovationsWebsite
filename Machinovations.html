@@ -1,0 +1,502 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Machinovations | Electrical & Automation Solutions</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&family=Rajdhani:wght@400;700&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --primary-color: #FFD700;
+      --secondary-color: #FFA500;
+      --bg-dark: #0a0a0a;
+      --bg-light: #111111;
+      --text-light: #f0f0f0;
+      --text-dark: #000000;
+      --border-color: rgba(255, 215, 0, 0.2);
+    }
+
+    /* --- Base Styles --- */
+    html {
+      scroll-behavior: smooth;
+    }
+    
+    body {
+      margin: 0;
+      font-family: 'Montserrat', sans-serif;
+      background-color: var(--bg-dark);
+      color: var(--text-light);
+      overflow-x: hidden;
+      position: relative;
+    }
+
+    body::before {
+      content: '';
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background-image: 
+        linear-gradient(to right, rgba(255, 215, 0, 0.05) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(255, 215, 0, 0.05) 1px, transparent 1px);
+      background-size: 40px 40px;
+      z-index: -1;
+      animation: moveGrid 60s linear infinite;
+    }
+
+    /* --- Reusable Components --- */
+    .section {
+      padding: 100px 5%;
+      text-align: center;
+      opacity: 0;
+      transform: translateY(40px);
+      transition: opacity 1s, transform 1s;
+    }
+    .section.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    .section-title {
+      font-family: 'Rajdhani', sans-serif;
+      font-weight: 700;
+      font-size: clamp(2.5rem, 6vw, 3rem);
+      margin-bottom: 60px;
+      position: relative;
+      display: inline-block;
+      color: var(--primary-color);
+    }
+    .section-title::after {
+      content: '';
+      position: absolute;
+      bottom: -15px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 80px;
+      height: 3px;
+      background: var(--primary-color);
+    }
+
+    /* --- Navigation Bar --- */
+    .main-nav {
+      position: fixed;
+      top: 0;
+      width: 100%;
+      padding: 10px 5%;
+      box-sizing: border-box;
+      background: rgba(10, 10, 10, 0.7);
+      backdrop-filter: blur(8px);
+      border-bottom: 1px solid var(--border-color);
+      z-index: 1000;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      transition: background-color 0.3s ease;
+    }
+    .nav-logo-group {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+      text-decoration: none;
+    }
+    .nav-logo-group img {
+      height: 50px;
+      width: auto;
+    }
+    .nav-logo-text h1 {
+      font-family: 'Rajdhani', sans-serif;
+      font-weight: 700;
+      font-size: 1.8rem;
+      color: var(--primary-color);
+      margin: 0;
+      line-height: 1;
+    }
+    .nav-logo-text p {
+      margin: 0;
+      font-family: 'Rajdhani', sans-serif;
+      font-size: 0.9rem;
+      color: var(--text-light);
+    }
+    .nav-menu {
+      list-style: none;
+      display: flex;
+      gap: 30px;
+      margin: 0;
+      padding: 0;
+    }
+    .nav-menu a {
+      color: var(--text-light);
+      text-decoration: none;
+      font-weight: bold;
+      padding: 5px 0;
+      position: relative;
+      transition: color 0.3s ease;
+      font-family: 'Rajdhani', sans-serif;
+      font-size: 1.1rem;
+    }
+    .nav-menu a::after {
+      content: '';
+      position: absolute;
+      width: 100%;
+      height: 2px;
+      background: var(--primary-color);
+      bottom: 0;
+      left: 0;
+      transform: scaleX(0);
+      transform-origin: center;
+      transition: transform 0.4s ease;
+    }
+    .nav-menu a:hover { color: var(--primary-color); }
+    .nav-menu a:hover::after { transform: scaleX(1); }
+    .nav-toggle { display: none; cursor: pointer; background: none; border: none; }
+    .nav-toggle .bar { display: block; width: 25px; height: 3px; margin: 5px auto; background-color: var(--text-light); transition: all 0.3s ease-in-out; }
+
+    /* --- Hero Section --- */
+    .hero {
+      padding-top: 80px;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      background: radial-gradient(circle, var(--bg-light) 0%, var(--bg-dark) 70%);
+    }
+    .hero-content > * {
+      opacity: 0;
+      transform: translateY(30px);
+    }
+    .hero img {
+      height: auto;
+      width: 100%;
+      max-width: 300px;
+      animation: fadeInUp 1s ease-out 0.2s forwards;
+    }
+    .hero-text {
+      font-family: 'Rajdhani', sans-serif;
+      font-size: clamp(3rem, 10vw, 5.5rem);
+      color: var(--primary-color);
+      margin: 1rem 0 0 0;
+      font-weight: 700;
+      animation: fadeInUp 1s ease-out 0.4s forwards;
+    }
+    .hero p {
+      font-family: 'Rajdhani', sans-serif;
+      font-size: clamp(1.1rem, 3vw, 1.4rem);
+      max-width: 700px;
+      margin: 1rem auto;
+      line-height: 1.6;
+      animation: fadeInUp 1s ease-out 0.6s forwards;
+    }
+
+    /* --- About Us Section --- */
+    #about p {
+        font-family: 'Rajdhani', sans-serif;
+        max-width: 800px;
+        margin: 0 auto;
+        line-height: 1.8;
+        font-size: 1.2rem;
+        color: #ccc;
+    }
+
+    /* --- Why Us Section --- */
+    .features-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 25px;
+        max-width: 1200px;
+        margin: 0 auto;
+        text-align: left;
+    }
+    .feature-item {
+        background: var(--bg-light);
+        padding: 25px;
+        border-radius: 8px;
+        border-left: 4px solid var(--primary-color);
+        display: flex;
+        align-items: center;
+        gap: 15px;
+        transition: transform 0.3s ease, background-color 0.3s;
+    }
+    .feature-item:hover { transform: translateY(-5px); background-color: #1a1a1a; }
+    .feature-item svg { width: 24px; height: 24px; color: var(--primary-color); flex-shrink: 0; }
+    .feature-item h3 { font-family: 'Rajdhani', sans-serif; font-size: 1.3rem; margin: 0; }
+
+    /* --- Services Section --- */
+    .service-cards {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+        gap: 30px;
+        text-align: left;
+    }
+    .service-card {
+      background-color: var(--bg-light);
+      border: 1px solid var(--border-color);
+      border-radius: 10px;
+      padding: 30px;
+      box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+      transition: transform 0.4s ease, border-color 0.4s ease;
+    }
+    .service-card:hover { transform: translateY(-10px); border-color: var(--primary-color); }
+    .service-card h3 { font-family: 'Rajdhani', sans-serif; font-size: 1.8rem; margin: 0 0 20px 0; color: var(--primary-color); }
+    .service-card ul { list-style-type: '✓  '; padding-left: 1.5rem; margin: 0; }
+    .service-card li { font-family: 'Rajdhani', sans-serif; font-size: 1.1rem; padding: 8px 0; color: #ccc; }
+    
+    /* --- Projects Section --- */
+    .project-cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 20px;
+    }
+    .project-card {
+        background-color: var(--bg-light);
+        border: 1px solid var(--border-color);
+        border-radius: 10px;
+        padding: 40px 20px;
+        transition: transform 0.4s ease, border-color 0.4s ease;
+    }
+    .project-card:hover { transform: translateY(-10px); border-color: var(--primary-color); }
+    .project-card h3 { font-family: 'Rajdhani', sans-serif; font-size: 1.5rem; margin: 0; }
+    
+    /* --- Partners Section --- */
+    .partners-grid {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 60px;
+        flex-wrap: wrap;
+        margin-top: 40px;
+    }
+    .partner-item img { height: 80px; max-width: 200px; object-fit: contain; }
+    .partner-item p { margin-top: 15px; color: #ccc; font-family: 'Rajdhani', sans-serif; font-size: 1.1rem; }
+    
+    /* --- Footer --- */
+    footer { padding: 60px 5%; background-color: var(--bg-dark); border-top: 1px solid var(--border-color); }
+    .footer-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 40px; max-width: 1200px; margin: 0 auto 40px auto; text-align: left; }
+    .footer-col h4 { font-family: 'Rajdhani', sans-serif; color: var(--primary-color); margin-bottom: 20px; font-size: 1.2rem; }
+    .footer-col p, .footer-col a { color: #bbbbbb; text-decoration: none; line-height: 1.8; font-size: 0.95rem; transition: color 0.3s ease; }
+    .footer-col a:hover { color: var(--primary-color); }
+    .footer-copyright { text-align: center; padding-top: 30px; border-top: 1px solid var(--border-color); color: #888; }
+    
+    /* --- Responsive Design --- */
+    @media (max-width: 992px) {
+        .nav-menu { position: fixed; top: 70px; right: 0; width: 100%; max-width: 350px; height: calc(100vh - 70px); background: var(--bg-dark); flex-direction: column; align-items: center; justify-content: center; gap: 40px; transform: translateX(100%); transition: transform 0.4s cubic-bezier(0.7, 0, 0.2, 1); }
+        .nav-menu.active { transform: translateX(0); }
+        .nav-toggle { display: block; z-index: 1001; }
+        .nav-toggle.active .bar:nth-child(1) { transform: translateY(8px) rotate(45deg); }
+        .nav-toggle.active .bar:nth-child(2) { opacity: 0; }
+        .nav-toggle.active .bar:nth-child(3) { transform: translateY(-8px) rotate(-45deg); }
+    }
+
+    /* --- Animations --- */
+    @keyframes moveGrid { from { background-position: 0 0; } to { background-position: 240px 240px; } }
+    @keyframes fadeInUp { to { opacity: 1; transform: translateY(0); } }
+  </style>
+</head>
+<body>
+  <nav class="main-nav" id="main-nav">
+    <a href="#" class="nav-logo-group">
+      <img src="images/Machinovations.png" alt="Machinovations Logo">
+      <div class="nav-logo-text">
+        <h1>MACHINOVATIONS</h1>
+        <p>Breakthrough Innovations</p>
+      </div>
+    </a>
+    <ul class="nav-menu" id="nav-menu">
+        <li><a href="#about">About</a></li>
+        <li><a href="#why-us">Why Us</a></li>
+        <li><a href="#services">Services</a></li>
+        <li><a href="#projects">Projects</a></li>
+        <li><a href="#collaborators">Collaborators</a></li>
+        <li><a href="#footer-contact">Contact</a></li>
+    </ul>
+    <button class="nav-toggle" id="nav-toggle" aria-label="menu-toggle">
+        <span class="bar"></span>
+        <span class="bar"></span>
+        <span class="bar"></span>
+    </button>
+  </nav>
+
+  <header class="hero">
+    <div class="hero-content">
+      <img src="images/Machinovations.png" alt="Machinovations Main Logo">
+      <h1 class="hero-text">MACHINOVATIONS</h1>
+      <p>Your trusted partner for the future of automation, powering your business with smart, efficient, and reliable electrical & automation solutions.</p>
+    </div>
+  </header>
+
+  <main>
+    <section id="about" class="section">
+        <h2 class="section-title">About Us</h2>
+        <p>At Machinovations, we specialize in providing top-tier electrical and automation services tailored to meet the needs of industrial, commercial, and real estate clients. With a commitment to innovation, safety, and efficiency, we ensure that our clients receive the best solutions for their electrical and automation requirements.</p>
+    </section>
+
+    <section id="why-us" class="section">
+        <h2 class="section-title">Why Choose Us?</h2>
+        <div class="features-grid">
+            <div class="feature-item">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.857-9.809a.75.75 0 00-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 10-1.06 1.061l2.5 2.5a.75.75 0 001.137-.089l4-5.5z" clip-rule="evenodd"/></svg>
+                <h3>Experienced & Certified Professionals</h3>
+            </div>
+            <div class="feature-item">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.857-9.809a.75.75 0 00-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 10-1.06 1.061l2.5 2.5a.75.75 0 001.137-.089l4-5.5z" clip-rule="evenodd"/></svg>
+                <h3>High-Quality Workmanship</h3>
+            </div>
+            <div class="feature-item">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.857-9.809a.75.75 0 00-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 10-1.06 1.061l2.5 2.5a.75.75 0 001.137-.089l4-5.5z" clip-rule="evenodd"/></svg>
+                <h3>Cutting-Edge Technology</h3>
+            </div>
+            <div class="feature-item">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.857-9.809a.75.75 0 00-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 10-1.06 1.061l2.5 2.5a.75.75 0 001.137-.089l4-5.5z" clip-rule="evenodd"/></svg>
+                <h3>Cost-Effective & Sustainable Solutions</h3>
+            </div>
+            <div class="feature-item">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.857-9.809a.75.75 0 00-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 10-1.06 1.061l2.5 2.5a.75.75 0 001.137-.089l4-5.5z" clip-rule="evenodd"/></svg>
+                <h3>Customer-Centric Approach</h3>
+            </div>
+        </div>
+    </section>
+
+    <section id="services" class="section">
+        <h2 class="section-title">Our Core Services</h2>
+        <div class="service-cards">
+            <div class="service-card">
+                <h3>1. Electrical</h3>
+                <ul>
+                    <li>Installation of Electrical Systems</li>
+                    <li>Wiring & Cabling Solutions</li>
+                    <li>Power Distribution & Panel Upgrades</li>
+                </ul>
+            </div>
+            <div class="service-card">
+                <h3>2. Automation Solutions</h3>
+                <ul>
+                    <li>Industrial Automation & Control Systems</li>
+                    <li>Smart Home Automation</li>
+                    <li>PLC & SCADA Programming</li>
+                    <li>Process Optimization & System Integration</li>
+                </ul>
+            </div>
+            <div class="service-card">
+                <h3>3. Maintenance & Support</h3>
+                <ul>
+                    <li>Preventive Maintenance Services</li>
+                    <li>Troubleshooting & Repairs</li>
+                    <li>24/7 Emergency Support</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <section id="projects" class="section">
+      <h2 class="section-title">Ongoing Projects</h2>
+      <div class="project-cards">
+          <div class="project-card"><h3>Spices, RTC & RTE Foods</h3></div>
+          <div class="project-card"><h3>Tyre</h3></div>
+          <div class="project-card"><h3>Textile</h3></div>
+          <div class="project-card"><h3>Apartment Complexes</h3></div>
+      </div>
+    </section>
+
+    <section id="collaborators" class="section">
+      <h2 class="section-title">Our Collaborators</h2>
+      <div class="partners-grid">
+        <div class="partner-item">
+            <img src="images/NanduSofTech_Logo.png" alt="Nandu Softech Solutions Logo">
+            <p>Nandu Softech Solutions, Cochin</p>
+        </div>
+        <div class="partner-item">
+            <img src="images/First_Technodrives.png" alt="First Technodrives Engineering Solutions & Services Logo">
+            <p>First Technodrives Engineering Solutions & Services, Cochin</p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer id="footer-contact">
+    <div class="footer-grid">
+        <div class="footer-col">
+            <h4>Contact Us</h4>
+            <p>Phone:<br>
+                <a href="tel:+918589067891">+91 85890 67891</a><br>
+                <a href="tel:+919562065776">+91 95620 65776</a>
+            </p>
+            <p>Email:<br><a href="mailto:machinovations@gmail.com">machinovations@gmail.com</a></p>
+            <p>Website:<br><a href="https://www.machinovations.com" target="_blank" rel="noopener noreferrer">www.machinovations.com</a></p>
+        </div>
+        <div class="footer-col">
+            <h4>Our Presence</h4>
+            <p><strong>Kochi Office:</strong><br>34/675A, 1st Floor, Kousthubham, Pudukalavattom, Elamakkara, Kochi - 682026, Kerala, India</p>
+        </div>
+        <div class="footer-col">
+            <h4>Kalady Office</h4>
+            <p>14/320B (First Floor), Kariyad-Airport-Mattoor Road, Kalady, Kerala 683574</p>
+        </div>
+        <div class="footer-col">
+            <h4>Machinovations</h4>
+            <p>Let's power your future with smart, efficient, and reliable electrical & automation solutions!</p>
+        </div>
+    </div>
+    <div class="footer-copyright">
+        <p>© 2025 Machinovations. All Rights Reserved.</p>
+    </div>
+  </footer>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      // --- Responsive Navigation Menu (Hamburger) ---
+      const navToggle = document.getElementById('nav-toggle');
+      const navMenu = document.getElementById('nav-menu');
+      navToggle.addEventListener('click', () => {
+        navMenu.classList.toggle('active');
+        navToggle.classList.toggle('active');
+      });
+      // Close mobile menu when a link is clicked
+      navMenu.querySelectorAll('a').forEach(link => {
+          link.addEventListener('click', () => {
+              navMenu.classList.remove('active');
+              navToggle.classList.remove('active');
+          });
+      });
+      
+      // --- Smooth Scrolling for all anchor links with hashes ---
+      document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function (e) {
+          if (this.getAttribute('href') === '#') {
+              e.preventDefault();
+              window.scrollTo({ top: 0, behavior: 'smooth' });
+              return;
+          }
+          const targetId = this.getAttribute('href');
+          const targetElement = document.querySelector(targetId);
+          if(targetElement) {
+              e.preventDefault();
+              const navHeight = document.getElementById('main-nav').offsetHeight;
+              const targetPosition = targetElement.getBoundingClientRect().top + window.pageYOffset - navHeight;
+              window.scrollTo({ top: targetPosition, behavior: 'smooth' });
+          }
+        });
+      });
+
+      // --- Scroll-triggered Animations for sections ---
+      const animatedElements = document.querySelectorAll('.section');
+      const observer = new IntersectionObserver(entries => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('visible');
+            observer.unobserve(entry.target);
+          }
+        });
+      }, {
+        threshold: 0.1,
+        rootMargin: "-50px 0px"
+      });
+
+      animatedElements.forEach(el => {
+        observer.observe(el);
+      });
+    });
+  </script>
+</body>
+</html>
