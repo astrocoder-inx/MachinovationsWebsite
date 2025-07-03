@@ -42,7 +42,7 @@
         linear-gradient(to right, rgba(255, 215, 0, 0.05) 1px, transparent 1px),
         linear-gradient(to bottom, rgba(255, 215, 0, 0.05) 1px, transparent 1px);
       background-size: 40px 40px;
-      z-index: -1;
+      z-index: -2; /* Pushed further back */
       animation: moveGrid 60s linear infinite;
     }
 
@@ -76,6 +76,56 @@
       width: 80px;
       height: 3px;
       background: var(--primary-color);
+    }
+
+    /* ======================================= */
+    /* ===== CIRCUIT ANIMATION STYLES ====== */
+    /* ======================================= */
+    .circuit-background {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -1;
+      pointer-events: none;
+      opacity: 0.3;
+    }
+    
+    .circuit-track path, .circuit-track circle {
+      fill: none;
+      stroke-width: 2px;
+      stroke: rgba(255, 215, 0, 0.2); /* Faint gold track */
+    }
+
+    .circuit-track circle {
+      fill: rgba(255, 215, 0, 0.2);
+    }
+    
+    .circuit-pulse path {
+      fill: none;
+      stroke-width: 3px;
+      stroke: var(--primary-color); /* Bright gold pulse */
+      stroke-dasharray: 20 200; /* A 20px pulse with a long gap */
+      stroke-dashoffset: 0;
+      animation: pulse-flow 5s linear infinite;
+    }
+
+    /* Add random delays to make the flow look asynchronous */
+    .circuit-pulse path:nth-child(2) {
+      animation-delay: -1.2s;
+    }
+    .circuit-pulse path:nth-child(3) {
+      animation-delay: -2.5s;
+    }
+    .circuit-pulse path:nth-child(4) {
+      animation-delay: -3.8s;
+    }
+
+    @keyframes pulse-flow {
+      to {
+        stroke-dashoffset: -220; /* The length of the dash + gap */
+      }
     }
 
     /* --- Navigation Bar --- */
@@ -163,15 +213,15 @@
       text-align: center;
       background: radial-gradient(circle, var(--bg-light) 0%, var(--bg-dark) 70%);
     }
-    .hero-content > * {
+    .hero-content {
       opacity: 0;
       transform: translateY(30px);
+      animation: fadeInUp 1s ease-out forwards;
     }
     .hero img {
       height: auto;
       width: 100%;
       max-width: 300px;
-      animation: fadeInUp 1s ease-out 0.2s forwards;
     }
     .hero-text {
       font-family: 'Rajdhani', sans-serif;
@@ -179,7 +229,6 @@
       color: var(--primary-color);
       margin: 1rem 0 0 0;
       font-weight: 700;
-      animation: fadeInUp 1s ease-out 0.4s forwards;
     }
     .hero p {
       font-family: 'Rajdhani', sans-serif;
@@ -187,7 +236,6 @@
       max-width: 700px;
       margin: 1rem auto;
       line-height: 1.6;
-      animation: fadeInUp 1s ease-out 0.6s forwards;
     }
 
     /* --- About Us Section --- */
@@ -217,9 +265,15 @@
         display: flex;
         align-items: center;
         gap: 15px;
-        transition: transform 0.3s ease, background-color 0.3s;
+        /* UPDATED: Added box-shadow to the transition */
+        transition: transform 0.3s ease, background-color 0.3s, box-shadow 0.3s ease;
     }
-    .feature-item:hover { transform: translateY(-5px); background-color: #1a1a1a; }
+    .feature-item:hover { 
+        transform: translateY(-5px); 
+        background-color: #1a1a1a;
+        /* NEW: Added glow effect */
+        box-shadow: 0 0 25px rgba(255, 215, 0, 0.15);
+    }
     .feature-item svg { width: 24px; height: 24px; color: var(--primary-color); flex-shrink: 0; }
     .feature-item h3 { font-family: 'Rajdhani', sans-serif; font-size: 1.3rem; margin: 0; }
 
@@ -235,10 +289,15 @@
       border: 1px solid var(--border-color);
       border-radius: 10px;
       padding: 30px;
-      box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
-      transition: transform 0.4s ease, border-color 0.4s ease;
+      /* UPDATED: Added box-shadow to the transition */
+      transition: transform 0.4s ease, border-color 0.4s ease, box-shadow 0.4s ease;
     }
-    .service-card:hover { transform: translateY(-10px); border-color: var(--primary-color); }
+    .service-card:hover { 
+        transform: translateY(-10px); 
+        border-color: var(--primary-color);
+        /* NEW: Added glow effect */
+        box-shadow: 0 0 25px rgba(255, 215, 0, 0.2);
+    }
     .service-card h3 { font-family: 'Rajdhani', sans-serif; font-size: 1.8rem; margin: 0 0 20px 0; color: var(--primary-color); }
     .service-card ul { list-style-type: '✓  '; padding-left: 1.5rem; margin: 0; }
     .service-card li { font-family: 'Rajdhani', sans-serif; font-size: 1.1rem; padding: 8px 0; color: #ccc; }
@@ -254,11 +313,64 @@
         border: 1px solid var(--border-color);
         border-radius: 10px;
         padding: 40px 20px;
-        transition: transform 0.4s ease, border-color 0.4s ease;
+        /* UPDATED: Added box-shadow to the transition */
+        transition: transform 0.4s ease, border-color 0.4s ease, box-shadow 0.4s ease;
     }
-    .project-card:hover { transform: translateY(-10px); border-color: var(--primary-color); }
+    .project-card:hover { 
+        transform: translateY(-10px); 
+        border-color: var(--primary-color);
+        /* NEW: Added glow effect */
+        box-shadow: 0 0 25px rgba(255, 215, 0, 0.2);
+    }
     .project-card h3 { font-family: 'Rajdhani', sans-serif; font-size: 1.5rem; margin: 0; }
     
+    /* --- Strengths Section --- */
+    .strengths-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 30px;
+        max-width: 900px;
+        margin: 0 auto;
+    }
+    .strength-card {
+        background: linear-gradient(145deg, #1a1a1a, #0f0f0f);
+        border: 1px solid var(--border-color);
+        border-radius: 10px;
+        padding: 40px;
+        text-align: center;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    .strength-card:hover {
+        transform: scale(1.05);
+        box-shadow: 0 0 25px rgba(255, 215, 0, 0.2);
+    }
+    .strength-card .icon {
+        width: 50px;
+        height: 50px;
+        color: var(--primary-color);
+        margin-bottom: 20px;
+    }
+    .strength-card .strength-number {
+        font-family: 'Rajdhani', sans-serif;
+        font-weight: 700;
+        font-size: clamp(4rem, 10vw, 6rem);
+        color: var(--primary-color);
+        line-height: 1;
+        margin-bottom: 15px;
+        text-shadow: 0 0 10px var(--secondary-color);
+    }
+    .strength-card h3 {
+        font-family: 'Rajdhani', sans-serif;
+        font-size: 1.6rem;
+        margin: 0 0 15px 0;
+    }
+    .strength-card p {
+        font-size: 1.1rem;
+        color: #ccc;
+        line-height: 1.7;
+        margin: 0;
+    }
+
     /* --- Partners Section --- */
     .partners-grid {
         display: flex;
@@ -295,6 +407,43 @@
   </style>
 </head>
 <body>
+
+  <!-- ======================================= -->
+  <!-- ===== CIRCUIT ANIMATION STARTS ====== -->
+  <!-- ======================================= -->
+  <div class="circuit-background">
+    <svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <pattern id="circuit-pattern" x="0" y="0" width="200" height="200" patternUnits="userSpaceOnUse">
+          <!-- The static background "tracks" -->
+          <g class="circuit-track">
+            <path d="M 0 20 H 50 L 75 45 H 125 L 150 20 H 200"/>
+            <path d="M 0 70 H 25 L 50 95 H 150 L 175 70 H 200"/>
+            <path d="M 0 120 H 100 L 125 145 H 175 L 200 120"/>
+            <path d="M 0 170 H 75 L 100 195 H 200"/>
+            <circle cx="50" cy="20" r="3"></circle>
+            <circle cx="150" cy="20" r="3"></circle>
+            <circle cx="25" cy="70" r="3"></circle>
+            <circle cx="175" cy="70" r="3"></circle>
+            <circle cx="100" cy="120" r="3"></circle>
+            <circle cx="75" cy="170" r="3"></circle>
+          </g>
+          <!-- The moving "pulses" -->
+          <g class="circuit-pulse">
+            <path d="M 0 20 H 50 L 75 45 H 125 L 150 20 H 200"/>
+            <path d="M 0 70 H 25 L 50 95 H 150 L 175 70 H 200"/>
+            <path d="M 0 120 H 100 L 125 145 H 175 L 200 120"/>
+            <path d="M 0 170 H 75 L 100 195 H 200"/>
+          </g>
+        </pattern>
+      </defs>
+      <rect x="0" y="0" width="100%" height="100%" fill="url(#circuit-pattern)"></rect>
+    </svg>
+  </div>
+  <!-- ======================================= -->
+  <!-- ====== CIRCUIT ANIMATION ENDS ======= -->
+  <!-- ======================================= -->
+
   <nav class="main-nav" id="main-nav">
     <a href="#" class="nav-logo-group">
       <img src="images/Machinovations.png" alt="Machinovations Logo">
@@ -308,6 +457,7 @@
         <li><a href="#why-us">Why Us</a></li>
         <li><a href="#services">Services</a></li>
         <li><a href="#projects">Projects</a></li>
+        <li><a href="#strengths">Our Strengths</a></li>
         <li><a href="#collaborators">Collaborators</a></li>
         <li><a href="#footer-contact">Contact</a></li>
     </ul>
@@ -392,10 +542,28 @@
     <section id="projects" class="section">
       <h2 class="section-title">Ongoing Projects</h2>
       <div class="project-cards">
-          <div class="project-card"><h3>Food Processing</h3></div>
+          <div class="project-card"><h3>Food Processing Industries</h3></div>
           <div class="project-card"><h3>Tyre Industries</h3></div>
           <div class="project-card"><h3>Textile Industries</h3></div>
           <div class="project-card"><h3>Apartment Complexes</h3></div>
+      </div>
+    </section>
+    
+    <section id="strengths" class="section">
+      <h2 class="section-title">Our Strengths</h2>
+      <div class="strengths-grid">
+          <div class="strength-card">
+              <svg class="icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 21v-4.5m0 4.5h4.5m-4.5 0L9 15M3.75 3v4.5m0-4.5h4.5m-4.5 0L9 9M15 3v4.5m0-4.5h4.5m-4.5 0L20.25 9M15 21v-4.5m0 4.5h4.5m-4.5 0L20.25 15" />
+              </svg>
+              <h3>Diverse Industry Expertise</h3>
+              <p>Specialized knowledge across key industrial sectors including Tyre, Pulp & Paper, Foods, and Spices.</p>
+          </div>
+          <div class="strength-card">
+              <div class="strength-number">30+</div>
+              <h3>Years of Proven Experience</h3>
+              <p>Extensive hands-on experience in electrical, instrumentation, automation, and rotating machinery.</p>
+          </div>
       </div>
     </section>
 
@@ -426,8 +594,8 @@
             <p>Website:<br><a href="https://www.machinovations.com" target="_blank" rel="noopener noreferrer">www.machinovations.com</a></p>
         </div>
         <div class="footer-col">
-            <h4>Our Presence</h4>
-            <p><strong>Kochi Office:</strong><br>34/675A, 1st Floor, Kousthubham, Pudukalavattom, Elamakkara, Kochi - 682026, Kerala, India</p>
+            <h4>Kochi Office</h4>
+            <p>34/675A, 1st Floor, Kousthubham, Pudukalavattom, Elamakkara, Kochi - 682026, Kerala, India</p>
         </div>
         <div class="footer-col">
             <h4>Kalady Office</h4>
