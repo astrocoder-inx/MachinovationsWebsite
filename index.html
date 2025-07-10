@@ -6,7 +6,8 @@
   <title>Machinovations | Electrical & Automation Solutions</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&family=Rajdhani:wght@400;700&display=swap" rel="stylesheet">
+  <!-- UPDATED: Removed Montserrat font to improve loading speed -->
+  <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;700&display=swap" rel="stylesheet">
 
   <style>
     :root {
@@ -26,24 +27,12 @@
     
     body {
       margin: 0;
-      font-family: 'Montserrat', sans-serif;
+      /* UPDATED: This now sets the default font for the entire site to Rajdhani */
+      font-family: 'Rajdhani', sans-serif;
       background-color: var(--bg-dark);
       color: var(--text-light);
       overflow-x: hidden;
       position: relative;
-    }
-
-    body::before {
-      content: '';
-      position: fixed;
-      top: 0; left: 0;
-      width: 100%; height: 100%;
-      background-image: 
-        linear-gradient(to right, rgba(255, 215, 0, 0.05) 1px, transparent 1px),
-        linear-gradient(to bottom, rgba(255, 215, 0, 0.05) 1px, transparent 1px);
-      background-size: 40px 40px;
-      z-index: -2; /* Pushed further back */
-      animation: moveGrid 60s linear infinite;
     }
 
     /* --- Reusable Components --- */
@@ -76,56 +65,6 @@
       width: 80px;
       height: 3px;
       background: var(--primary-color);
-    }
-
-    /* ======================================= */
-    /* ===== CIRCUIT ANIMATION STYLES ====== */
-    /* ======================================= */
-    .circuit-background {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      z-index: -1;
-      pointer-events: none;
-      opacity: 0.3;
-    }
-    
-    .circuit-track path, .circuit-track circle {
-      fill: none;
-      stroke-width: 2px;
-      stroke: rgba(255, 215, 0, 0.2); /* Faint gold track */
-    }
-
-    .circuit-track circle {
-      fill: rgba(255, 215, 0, 0.2);
-    }
-    
-    .circuit-pulse path {
-      fill: none;
-      stroke-width: 3px;
-      stroke: var(--primary-color); /* Bright gold pulse */
-      stroke-dasharray: 20 200; /* A 20px pulse with a long gap */
-      stroke-dashoffset: 0;
-      animation: pulse-flow 5s linear infinite;
-    }
-
-    /* Add random delays to make the flow look asynchronous */
-    .circuit-pulse path:nth-child(2) {
-      animation-delay: -1.2s;
-    }
-    .circuit-pulse path:nth-child(3) {
-      animation-delay: -2.5s;
-    }
-    .circuit-pulse path:nth-child(4) {
-      animation-delay: -3.8s;
-    }
-
-    @keyframes pulse-flow {
-      to {
-        stroke-dashoffset: -220; /* The length of the dash + gap */
-      }
     }
 
     /* --- Navigation Bar --- */
@@ -164,7 +103,6 @@
     }
     .nav-logo-text p {
       margin: 0;
-      font-family: 'Rajdhani', sans-serif;
       font-size: 0.9rem;
       color: var(--text-light);
     }
@@ -182,7 +120,6 @@
       padding: 5px 0;
       position: relative;
       transition: color 0.3s ease;
-      font-family: 'Rajdhani', sans-serif;
       font-size: 1.1rem;
     }
     .nav-menu a::after {
@@ -202,45 +139,76 @@
     .nav-toggle { display: none; cursor: pointer; background: none; border: none; }
     .nav-toggle .bar { display: block; width: 25px; height: 3px; margin: 5px auto; background-color: var(--text-light); transition: all 0.3s ease-in-out; }
 
-    /* --- Hero Section --- */
+    /* --- Hero Section with Video Background --- */
     .hero {
       padding-top: 80px;
-      min-height: 100vh;
+      height: 100vh;
+      min-height: 600px;
       display: flex;
       flex-direction: column;
       justify-content: center;
       align-items: center;
       text-align: center;
-      background: radial-gradient(circle, var(--bg-light) 0%, var(--bg-dark) 70%);
+      position: relative;
+      overflow: hidden;
+      color: white;
+      background: transparent;
     }
+
+    #hero-video {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        min-width: 100%;
+        min-height: 100%;
+        width: auto;
+        height: auto;
+        z-index: -2;
+    }
+
+    .video-overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.6);
+        z-index: -1;
+    }
+
     .hero-content {
       opacity: 0;
       transform: translateY(30px);
       animation: fadeInUp 1s ease-out forwards;
+      position: relative;
+      z-index: 1;
     }
     .hero img {
       height: auto;
       width: 100%;
       max-width: 300px;
     }
-    .hero-text {
-      font-family: 'Rajdhani', sans-serif;
+        .hero-text {
       font-size: clamp(3rem, 10vw, 5.5rem);
       color: var(--primary-color);
-      margin: 1rem 0 0 0;
+      /* UPDATED: Removed margin-bottom and added a specific line-height */
+      margin: 0.5rem 0 0 0;
       font-weight: 700;
+      text-shadow: 0 0 15px rgba(0,0,0,0.7);
+      line-height: 1; /* NEW: This is the key change to remove extra vertical space */
     }
     .hero p {
-      font-family: 'Rajdhani', sans-serif;
       font-size: clamp(1.1rem, 3vw, 1.4rem);
       max-width: 700px;
-      margin: 1rem auto;
+      /* UPDATED: Removed top margin to bring it right up against the title */
+      margin: 0 auto;
       line-height: 1.6;
+      text-shadow: 0 0 10px rgba(0,0,0,0.7);
     }
 
     /* --- About Us Section --- */
     #about p {
-        font-family: 'Rajdhani', sans-serif;
         max-width: 800px;
         margin: 0 auto;
         line-height: 1.8;
@@ -249,13 +217,30 @@
     }
 
     /* --- Why Us Section --- */
-    .features-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-        gap: 25px;
-        max-width: 1200px;
-        margin: 0 auto;
-        text-align: left;
+    .features-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 25px;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    .features-row {
+      width: 100%;
+      display: grid;
+      gap: 25px;
+    }
+    .features-row.top-row {
+      grid-template-columns: repeat(3, 1fr);
+    }
+    .features-row.bottom-row {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+    .features-row.bottom-row .feature-item {
+      flex-basis: 300px;
+      margin: 0 12.5px;
     }
     .feature-item {
         background: var(--bg-light);
@@ -265,17 +250,15 @@
         display: flex;
         align-items: center;
         gap: 15px;
-        /* UPDATED: Added box-shadow to the transition */
         transition: transform 0.3s ease, background-color 0.3s, box-shadow 0.3s ease;
     }
     .feature-item:hover { 
         transform: translateY(-5px); 
         background-color: #1a1a1a;
-        /* NEW: Added glow effect */
         box-shadow: 0 0 25px rgba(255, 215, 0, 0.15);
     }
     .feature-item svg { width: 24px; height: 24px; color: var(--primary-color); flex-shrink: 0; }
-    .feature-item h3 { font-family: 'Rajdhani', sans-serif; font-size: 1.3rem; margin: 0; }
+    .feature-item h3 { font-size: 1.3rem; margin: 0; }
 
     /* --- Services Section --- */
     .service-cards {
@@ -289,41 +272,71 @@
       border: 1px solid var(--border-color);
       border-radius: 10px;
       padding: 30px;
-      /* UPDATED: Added box-shadow to the transition */
       transition: transform 0.4s ease, border-color 0.4s ease, box-shadow 0.4s ease;
     }
     .service-card:hover { 
         transform: translateY(-10px); 
         border-color: var(--primary-color);
-        /* NEW: Added glow effect */
         box-shadow: 0 0 25px rgba(255, 215, 0, 0.2);
     }
-    .service-card h3 { font-family: 'Rajdhani', sans-serif; font-size: 1.8rem; margin: 0 0 20px 0; color: var(--primary-color); }
+    .service-card h3 { font-size: 1.8rem; margin: 0 0 20px 0; color: var(--primary-color); }
     .service-card ul { list-style-type: '✓  '; padding-left: 1.5rem; margin: 0; }
-    .service-card li { font-family: 'Rajdhani', sans-serif; font-size: 1.1rem; padding: 8px 0; color: #ccc; }
+    .service-card li { font-size: 1.1rem; padding: 8px 0; color: #ccc; }
     
-    /* --- Projects Section --- */
-    .project-cards {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-      gap: 20px;
+    /* --- "Sectoral Presence" Section --- */
+    .sector-grid-container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 40px;
+        max-width: 1200px;
+        margin: 0 auto;
     }
-    .project-card {
-        background-color: var(--bg-light);
-        border: 1px solid var(--border-color);
-        border-radius: 10px;
-        padding: 40px 20px;
-        /* UPDATED: Added box-shadow to the transition */
-        transition: transform 0.4s ease, border-color 0.4s ease, box-shadow 0.4s ease;
+    .sector-row {
+        width: 100%;
+        display: grid;
+        gap: 40px;
     }
-    .project-card:hover { 
-        transform: translateY(-10px); 
+    .sector-row.top-row {
+        grid-template-columns: repeat(4, 1fr);
+    }
+    .sector-row.bottom-row {
+        display: flex;
+        justify-content: center;
+        flex-wrap: wrap; /* Allows stacking on small screens */
+    }
+    .sector-row.bottom-row .sector-item {
+        flex-basis: 280px; /* Base width for each item */
+        max-width: 25%;
+    }
+    .sector-item {
+        text-align: center;
+    }
+    .sector-item img {
+        width: 100%;
+        max-width: 220px;
+        aspect-ratio: 1 / 1;
+        object-fit: cover;
+        border-radius: 50%;
+        border: 3px solid var(--border-color);
+        transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+    }
+    .sector-item h3 {
+        font-size: 1.2rem;
+        font-weight: 700;
+        color: #ccc;
+        margin-top: 15px;
+        transition: color 0.3s ease;
+    }
+    .sector-item:hover img {
+        transform: scale(1.05);
         border-color: var(--primary-color);
-        /* NEW: Added glow effect */
         box-shadow: 0 0 25px rgba(255, 215, 0, 0.2);
     }
-    .project-card h3 { font-family: 'Rajdhani', sans-serif; font-size: 1.5rem; margin: 0; }
-    
+    .sector-item:hover h3 {
+        color: var(--primary-color);
+    }
+
     /* --- Strengths Section --- */
     .strengths-grid {
         display: grid;
@@ -351,7 +364,6 @@
         margin-bottom: 20px;
     }
     .strength-card .strength-number {
-        font-family: 'Rajdhani', sans-serif;
         font-weight: 700;
         font-size: clamp(4rem, 10vw, 6rem);
         color: var(--primary-color);
@@ -360,7 +372,6 @@
         text-shadow: 0 0 10px var(--secondary-color);
     }
     .strength-card h3 {
-        font-family: 'Rajdhani', sans-serif;
         font-size: 1.6rem;
         margin: 0 0 15px 0;
     }
@@ -381,13 +392,13 @@
         margin-top: 40px;
     }
     .partner-item img { height: 80px; max-width: 200px; object-fit: contain; }
-    .partner-item p { margin-top: 15px; color: #ccc; font-family: 'Rajdhani', sans-serif; font-size: 1.1rem; }
+    .partner-item p { margin-top: 15px; color: #ccc; font-size: 1.1rem; }
     
     /* --- Footer --- */
     footer { padding: 60px 5%; background-color: var(--bg-dark); border-top: 1px solid var(--border-color); }
     .footer-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 40px; max-width: 1200px; margin: 0 auto 40px auto; text-align: left; }
-    .footer-col h4 { font-family: 'Rajdhani', sans-serif; color: var(--primary-color); margin-bottom: 20px; font-size: 1.2rem; }
-    .footer-col p, .footer-col a { color: #bbbbbb; text-decoration: none; line-height: 1.8; font-size: 0.95rem; transition: color 0.3s ease; }
+    .footer-col h4 { font-size: 1.7rem; color: var(--primary-color); margin-bottom: 20px; }
+    .footer-col p, .footer-col a { color: #bbbbbb; text-decoration: none; line-height: 1.8; font-size: 1.1rem; transition: color 0.3s ease; }
     .footer-col a:hover { color: var(--primary-color); }
     .footer-copyright { text-align: center; padding-top: 30px; border-top: 1px solid var(--border-color); color: #888; }
     
@@ -400,6 +411,33 @@
         .nav-toggle.active .bar:nth-child(2) { opacity: 0; }
         .nav-toggle.active .bar:nth-child(3) { transform: translateY(-8px) rotate(-45deg); }
     }
+    
+    @media (max-width: 768px) {
+        /* Stack sector rows into a simple grid on mobile */
+        .sector-row.top-row, .sector-row.bottom-row {
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            display: grid;
+            justify-content: center;
+        }
+        .sector-row.bottom-row .sector-item {
+            max-width: 100%;
+        }
+
+        /* Stack features rows into a single column on mobile */
+        .features-row.top-row, .features-row.bottom-row {
+            grid-template-columns: 1fr;
+            display: grid;
+        }
+        .features-row.bottom-row {
+            justify-content: initial;
+            flex-direction: column;
+            align-items: stretch;
+        }
+        .features-row.bottom-row .feature-item {
+            margin: 0;
+        }
+    }
+
 
     /* --- Animations --- */
     @keyframes moveGrid { from { background-position: 0 0; } to { background-position: 240px 240px; } }
@@ -407,42 +445,6 @@
   </style>
 </head>
 <body>
-
-  <!-- ======================================= -->
-  <!-- ===== CIRCUIT ANIMATION STARTS ====== -->
-  <!-- ======================================= -->
-  <div class="circuit-background">
-    <svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
-      <defs>
-        <pattern id="circuit-pattern" x="0" y="0" width="200" height="200" patternUnits="userSpaceOnUse">
-          <!-- The static background "tracks" -->
-          <g class="circuit-track">
-            <path d="M 0 20 H 50 L 75 45 H 125 L 150 20 H 200"/>
-            <path d="M 0 70 H 25 L 50 95 H 150 L 175 70 H 200"/>
-            <path d="M 0 120 H 100 L 125 145 H 175 L 200 120"/>
-            <path d="M 0 170 H 75 L 100 195 H 200"/>
-            <circle cx="50" cy="20" r="3"></circle>
-            <circle cx="150" cy="20" r="3"></circle>
-            <circle cx="25" cy="70" r="3"></circle>
-            <circle cx="175" cy="70" r="3"></circle>
-            <circle cx="100" cy="120" r="3"></circle>
-            <circle cx="75" cy="170" r="3"></circle>
-          </g>
-          <!-- The moving "pulses" -->
-          <g class="circuit-pulse">
-            <path d="M 0 20 H 50 L 75 45 H 125 L 150 20 H 200"/>
-            <path d="M 0 70 H 25 L 50 95 H 150 L 175 70 H 200"/>
-            <path d="M 0 120 H 100 L 125 145 H 175 L 200 120"/>
-            <path d="M 0 170 H 75 L 100 195 H 200"/>
-          </g>
-        </pattern>
-      </defs>
-      <rect x="0" y="0" width="100%" height="100%" fill="url(#circuit-pattern)"></rect>
-    </svg>
-  </div>
-  <!-- ======================================= -->
-  <!-- ====== CIRCUIT ANIMATION ENDS ======= -->
-  <!-- ======================================= -->
 
   <nav class="main-nav" id="main-nav">
     <a href="#" class="nav-logo-group">
@@ -454,10 +456,10 @@
     </a>
     <ul class="nav-menu" id="nav-menu">
         <li><a href="#about">About Us</a></li>
-        <li><a href="#why-us">Why Us</a></li>
         <li><a href="#services">Services</a></li>
-        <li><a href="#projects">Projects</a></li>
-        <li><a href="#strengths">Our Strengths</a></li>
+        <li><a href="#sectors">Sectors</a></li>
+        <li><a href="#why-us">Why Us</a></li>
+        <li><a href="#strengths">Strengths</a></li>
         <li><a href="#collaborators">Collaborators</a></li>
         <li><a href="#footer-contact">Contact</a></li>
     </ul>
@@ -468,11 +470,21 @@
     </button>
   </nav>
 
+  <!-- UPDATED HERO SECTION with Video Background -->
   <header class="hero">
+    <!-- The Video Background for this section only -->
+    <video playsinline autoplay muted loop id="hero-video">
+        <source src="video/Automation Project Video.mp4" type="video/mp4">
+    </video>
+    
+    <!-- The Dark Overlay for Readability -->
+    <div class="video-overlay"></div>
+
+    <!-- The Hero Content -->
     <div class="hero-content">
       <img src="images/Machinovations.png" alt="Machinovations Main Logo">
       <h1 class="hero-text">MACHINOVATIONS</h1>
-      <p>Your trusted partner for the future of automation, powering your business with smart, efficient, and reliable electrical & automation solutions.</p>
+      <p>YOUR TRUSTED PARTNER IN AUTOMATION</p>
     </div>
   </header>
 
@@ -482,56 +494,30 @@
         <p>At Machinovations, we specialize in providing top-tier electrical and automation services tailored to meet the needs of industrial, commercial, and real estate clients. With a commitment to innovation, safety, and efficiency, we ensure that our clients receive the best solutions for their electrical and automation requirements.</p>
     </section>
 
-    <section id="why-us" class="section">
-        <h2 class="section-title">Why Choose Us?</h2>
-        <div class="features-grid">
-            <div class="feature-item">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.857-9.809a.75.75 0 00-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 10-1.06 1.061l2.5 2.5a.75.75 0 001.137-.089l4-5.5z" clip-rule="evenodd"/></svg>
-                <h3>Experienced & Certified Professionals</h3>
-            </div>
-            <div class="feature-item">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.857-9.809a.75.75 0 00-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 10-1.06 1.061l2.5 2.5a.75.75 0 001.137-.089l4-5.5z" clip-rule="evenodd"/></svg>
-                <h3>High-Quality Workmanship</h3>
-            </div>
-            <div class="feature-item">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.857-9.809a.75.75 0 00-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 10-1.06 1.061l2.5 2.5a.75.75 0 001.137-.089l4-5.5z" clip-rule="evenodd"/></svg>
-                <h3>Cutting-Edge Technology</h3>
-            </div>
-            <div class="feature-item">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.857-9.809a.75.75 0 00-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 10-1.06 1.061l2.5 2.5a.75.75 0 001.137-.089l4-5.5z" clip-rule="evenodd"/></svg>
-                <h3>Cost-Effective & Sustainable Solutions</h3>
-            </div>
-            <div class="feature-item">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.857-9.809a.75.75 0 00-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 10-1.06 1.061l2.5 2.5a.75.75 0 001.137-.089l4-5.5z" clip-rule="evenodd"/></svg>
-                <h3>Customer-Centric Approach</h3>
-            </div>
-        </div>
-    </section>
-
     <section id="services" class="section">
-        <h2 class="section-title">Our Core Services</h2>
+        <h2 class="section-title">Our Services</h2>
         <div class="service-cards">
             <div class="service-card">
-                <h3>1. Electrical</h3>
+                <h3>Electrical</h3>
                 <ul>
                     <li>Installation of Electrical Systems</li>
-                    <li>Wiring & Cabling Solutions</li>
-                    <li>Power Distribution & Panel Upgrades</li>
+                    <li>Wiring and Cabling Solutions</li>
+                    <li>Power Distribution and Panel Upgrades</li>
                 </ul>
             </div>
             <div class="service-card">
-                <h3>2. Automation Solutions</h3>
+                <h3>Automation Solutions</h3>
                 <ul>
-                    <li>Industrial Automation & Control Systems</li>
+                    <li>Industrial Automation and Control Systems</li>
                     <li>Smart Home Automation</li>
                     <li>PLC & SCADA Programming</li>
                     <li>Process Optimization & System Integration</li>
                 </ul>
             </div>
             <div class="service-card">
-                <h3>3. Maintenance & Support</h3>
+                <h3>Maintenance & Support</h3>
                 <ul>
-                    <li>Preventive Maintenance Services</li>
+                    <li>Preventive Maintenance Support</li>
                     <li>Troubleshooting & Repairs</li>
                     <li>24/7 Emergency Support</li>
                 </ul>
@@ -539,14 +525,72 @@
         </div>
     </section>
 
-    <section id="projects" class="section">
-      <h2 class="section-title">Ongoing Projects</h2>
-      <div class="project-cards">
-          <div class="project-card"><h3>Food Processing Industries</h3></div>
-          <div class="project-card"><h3>Tyre Industries</h3></div>
-          <div class="project-card"><h3>Textile Industries</h3></div>
-          <div class="project-card"><h3>Apartment Complexes</h3></div>
-      </div>
+    <section id="sectors" class="section">
+        <h2 class="section-title">Our Sectoral Presence</h2>
+        <div class="sector-grid-container">
+            <div class="sector-row top-row">
+                <div class="sector-item">
+                    <img src="images/spices.jpg" alt="Spices">
+                    <h3>Spices</h3>
+                </div>
+                <div class="sector-item">
+                    <img src="images/essentialoils.jpg" alt="Essential Oils & Oleoresins">
+                    <h3>Essential Oils & Oleoresins</h3>
+                </div>
+                <div class="sector-item">
+                    <img src="images/nuts.jpg" alt="Edible Nuts - Processing & Packaging">
+                    <h3>Edible Nuts - Processing & Packaging</h3>
+                </div>
+                <div class="sector-item">
+                    <img src="images/autorubber.jpg" alt="Automotive Rubber">
+                    <h3>Automotive Rubber</h3>
+                </div>
+            </div>
+            <div class="sector-row bottom-row">
+                <div class="sector-item">
+                    <img src="images/loommachine(1).jpg" alt="Woven Carpets">
+                    <h3>Woven Carpets</h3>
+                </div>
+                <div class="sector-item">
+                    <img src="images/realty.jpg" alt="Realty">
+                    <h3>Realty</h3>
+                </div>
+                 <div class="sector-item">
+                    <img src="images/powersupply.jpg" alt="Power Supply & Distribution">
+                    <h3>Power Supply & Distribution</h3>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <section id="why-us" class="section">
+        <h2 class="section-title">Why Choose Us</h2>
+        <div class="features-container">
+            <div class="features-row top-row">
+                <div class="feature-item">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.857-9.809a.75.75 0 00-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 10-1.06 1.061l2.5 2.5a.75.75 0 001.137-.089l4-5.5z" clip-rule="evenodd"/></svg>
+                    <h3>Experienced & Certified Professionals</h3>
+                </div>
+                <div class="feature-item">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.857-9.809a.75.75 0 00-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 10-1.06 1.061l2.5 2.5a.75.75 0 001.137-.089l4-5.5z" clip-rule="evenodd"/></svg>
+                    <h3>High-Quality Workmanship</h3>
+                </div>
+                <div class="feature-item">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.857-9.809a.75.75 0 00-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 10-1.06 1.061l2.5 2.5a.75.75 0 001.137-.089l4-5.5z" clip-rule="evenodd"/></svg>
+                    <h3>Cutting-Edge Technology</h3>
+                </div>
+            </div>
+            <div class="features-row bottom-row">
+                <div class="feature-item">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.857-9.809a.75.75 0 00-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 10-1.06 1.061l2.5 2.5a.75.75 0 001.137-.089l4-5.5z" clip-rule="evenodd"/></svg>
+                    <h3>Cost-Effective & Sustainable Solutions</h3>
+                </div>
+                <div class="feature-item">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.857-9.809a.75.75 0 00-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 10-1.06 1.061l2.5 2.5a.75.75 0 001.137-.089l4-5.5z" clip-rule="evenodd"/></svg>
+                    <h3>Customer-Centric Approach</h3>
+                </div>
+            </div>
+        </div>
     </section>
     
     <section id="strengths" class="section">
@@ -556,7 +600,7 @@
               <svg class="icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 21v-4.5m0 4.5h4.5m-4.5 0L9 15M3.75 3v4.5m0-4.5h4.5m-4.5 0L9 9M15 3v4.5m0-4.5h4.5m-4.5 0L20.25 9M15 21v-4.5m0 4.5h4.5m-4.5 0L20.25 15" />
               </svg>
-              <h3>Diverse Industry Expertise</h3>
+              <h3>Expertise in Different Industrial Sectors</h3>
               <p>Specialized knowledge across key industrial sectors including Tyre, Pulp & Paper, Foods, and Spices.</p>
           </div>
           <div class="strength-card">
@@ -594,16 +638,12 @@
             <p>Website:<br><a href="https://www.machinovations.com" target="_blank" rel="noopener noreferrer">www.machinovations.com</a></p>
         </div>
         <div class="footer-col">
-            <h4>Kochi Office</h4>
+            <h4>Regd Office:</h4>
             <p>34/675A, 1st Floor, Kousthubham, Pudukalavattom, Elamakkara, Kochi - 682026, Kerala, India</p>
         </div>
         <div class="footer-col">
-            <h4>Kalady Office</h4>
-            <p>14/320B (First Floor), Kariyad-Airport-Mattoor Road, Kalady, Kerala 683574</p>
-        </div>
-        <div class="footer-col">
-            <h4>Machinovations</h4>
-            <p>Let's power your future with smart, efficient, and reliable electrical & automation solutions!</p>
+            <h4>Sales Office:</h4>
+            <p>14/320B, 1st Floor, Kariyad-Airport-Mattoor Road, Kalady, Kerala, India - 683574</p>
         </div>
     </div>
     <div class="footer-copyright">
